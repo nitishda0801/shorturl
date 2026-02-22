@@ -1,4 +1,4 @@
-package com.niti.shorturl;
+package com.niti.urlshortener;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;

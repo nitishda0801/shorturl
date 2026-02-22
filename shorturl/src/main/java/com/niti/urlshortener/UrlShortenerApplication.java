@@ -1,13 +1,13 @@
-package com.niti.shorturl;
+package com.niti.urlshortener;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
 @SpringBootApplication
-public class ShorturlApplication {
+public class UrlShortenerApplication {
 
 	public static void main(String[] args) {
-		SpringApplication.run(ShorturlApplication.class, args);
+		SpringApplication.run(UrlShortenerApplication.class, args);
 	}
 
 }

@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Java URL Shortener</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-gray-100 flex items-center justify-center h-screen">
+
+<div class="bg-white p-8 rounded-lg shadow-md w-full max-w-md">
+    <h1 class="text-2xl font-bold mb-6 text-center text-blue-600">URL Shortener</h1>
+
+    <div class="space-y-4">
+        <input type="url" id="originalUrl" placeholder="Paste your long URL here..."
+               class="w-full px-4 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500">
+
+        <button onclick="shortenUrl()"
+                class="w-full bg-blue-600 text-white py-2 rounded-md hover:bg-blue-700 transition">
+            Shorten URL
+        </button>
+    </div>
+
+    <div id="result" class="mt-6 hidden">
+        <p class="text-sm text-gray-600">Your shortened link:</p>
+        <div class="flex items-center mt-2 p-2 bg-gray-50 border rounded">
+            <a id="shortLink" href="#" target="_blank" class="text-blue-500 font-medium truncate flex-1"></a>
+            <button onclick="copyToClipboard()" class="ml-2 text-xs bg-gray-200 px-2 py-1 rounded hover:bg-gray-300">Copy</button>
+        </div>
+    </div>
+</div>
+
+<script>
+    async function shortenUrl() {
+        const urlInput = document.getElementById('originalUrl').value;
+        const resultDiv = document.getElementById('result');
+        const shortLinkA = document.getElementById('shortLink');
+
+        if (!urlInput) {
+            alert("Please enter a URL");
+            return;
+        }
+
+        try {
+            const response = await fetch('/api/v1/shorten', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ url: urlInput })
+            });
+
+            const data = await response.json();
+
+            if (response.ok) {
+                shortLinkA.href = data.shortUrl;
+                shortLinkA.innerText = data.shortUrl;
+                resultDiv.classList.remove('hidden');
+            } else {
+                alert("Error shortening URL");
+            }
+        } catch (error) {
+            console.error("Error:", error);
+            alert("Could not connect to the server.");
+        }
+    }
+
+    function copyToClipboard() {
+        const text = document.getElementById('shortLink').innerText;
+        navigator.clipboard.writeText(text);
+        alert("Copied to clipboard!");
+    }
+</script>
+</body>
+</html>
